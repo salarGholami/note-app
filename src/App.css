@@ -90,6 +90,11 @@
   gap: 1.5rem;
   align-items: center;
 }
+.note-item__header .actions button{
+  font-size: 25px;
+  color: red;
+  font-weight: bold;
+}
 
 .note-item__header .trash {
   width: 1.5rem;
@@ -101,3 +106,4 @@
 .note-item__footer {
   color: var(--text-300);
 }
+/* .actions{} */
