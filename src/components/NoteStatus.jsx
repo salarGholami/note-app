@@ -1,10 +1,12 @@
+import Message from "./Message";
+
 function NoteStatus({ notes }) {
   //dervied state :
   const allNotes = notes.length;
   const completedNotes = notes.filter((n) => n.completed).length;
   const unCompeltedNotes = allNotes - completedNotes;
 
-  if (!allNotes) return <h2>no Notes has Alerdy been added ! </h2>;
+  if (!allNotes) return <Message>this is children text</Message>;
 
   return (
     <ul className="note-status">
