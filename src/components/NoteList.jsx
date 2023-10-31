@@ -1,7 +1,24 @@
-function NoteList({ notes, onDelete, onComplete }) {
+function NoteList({ notes, onDelete, onComplete, sortBy }) {
+  let sortedNotes = notes;
+  
+  if (sortBy === "earliest")
+    sortedNotes = [...notes].sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    ); // a - b => a > b ? 1 : -1    this is sort ascending
+
+  if (sortBy === "latest")
+    sortedNotes = [...notes].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    ); // b - a => a > b ? -1 : 1   this is sort Descending
+
+  if (sortBy === "completed")
+    sortedNotes = [...notes].sort(
+      (a, b) => Number(a.completed) - Number(b.completed)
+    );
+
   return (
     <div>
-      {notes.map((note) => (
+      {sortedNotes.map((note) => (
         <NoteItem
           key={note.id}
           note={note}
