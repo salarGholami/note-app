@@ -4,37 +4,43 @@ import AddNewNote from "./components/AddNewNote";
 import NoteList from "./components/NoteList";
 import NoteStatus from "./components/NoteStatus";
 import NoteHeader from "./components/NoteHeader";
+import { useReducer } from "react";
+
+const notesReducer = (state, action) => {
+  switch (action.type) {
+    case "add": {
+      return [...state, action.palyload];
+    }
+    case "delete": {
+      return state.filter((s) => s.id !== action.palyload);
+    }
+    case "complete": {
+      return state.map((note) =>
+        note.id === action.palyload
+          ? { ...note, completed: !note.completed }
+          : note
+      );
+    }
+    default:
+      throw new Error("unknow error" + action.type);
+  }
+};
 
 function App() {
-  const [notes, setNotes] = useState([]);
+  const [notes, dispatch] = useReducer(notesReducer, []);
   const [sortBy, setSortBy] = useState("latest");
 
   const handleAddNotes = (newNote) => {
-    setNotes((prevNote) => [...prevNote, newNote]);
+    dispatch({ type: "add", palyload: newNote });
   };
 
   const handleDeleteNote = (id) => {
-    // const filteredNotes = notes.filter((n) => n.id !== id);
-    // setNotes(filteredNotes);   // maybye to be muted
-
-    setNotes((prevNotes) => prevNotes.filter((n) => n.id !== id)); //another way to unmuted react to delete notes
+    dispatch({ type: "delete", palyload: id });
   };
 
   const handleCompleteNote = (e) => {
-    console.log(e.target.value);
     const noteId = Number(e.target.value);
-
-    // const newNotes = notes.map((note) =>
-    //   note.id === noteId ? { ...note, completed: !note.completed } : note
-    // );
-    // setNotes(newNotes);  // maybye to be muted
-
-    setNotes(
-      (prevNotes) =>
-        prevNotes.map((note) =>
-          note.id === noteId ? { ...note, completed: !note.completed } : note
-        ) //another way to unmuted react when checkedBox notes
-    );
+    dispatch({ type: "complete", palyload: noteId });
   };
 
   return (
