@@ -1,6 +1,10 @@
-function NoteList({ notes, onDelete, onComplete, sortBy }) {
+import { useNotes, useNotesDispatch } from "../context/NotesContext";
+
+function NoteList({ sortBy }) {
+  const notes = useNotes();
+
   let sortedNotes = notes;
-  
+
   if (sortBy === "earliest")
     sortedNotes = [...notes].sort(
       (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
@@ -32,7 +36,8 @@ function NoteList({ notes, onDelete, onComplete, sortBy }) {
 
 export default NoteList;
 
-function NoteItem({ note, onDelete, onComplete }) {
+function NoteItem({ note }) {
+  const dispatch = useNotesDispatch();
   const options = {
     year: "numeric",
     month: "long",
@@ -47,14 +52,21 @@ function NoteItem({ note, onDelete, onComplete }) {
           <p className="desc">{note.description}</p>
         </div>
         <div className="actions">
-          <button onClick={() => onDelete(note.id)}>&#x00d7;</button>
+          <button
+            onClick={() => dispatch({ type: "delete", palyload: note.id })}
+          >
+            &#x00d7;
+          </button>
           <input
             type="checkbox"
             name={note.id}
             id={note.id}
             value={note.id}
             checked={note.completed}
-            onChange={onComplete}
+            onChange={(e) => {
+              const noteId = Number(e.target.value);
+              dispatch({ type: "complete", palyload: noteId });
+            }}
           />
         </div>
       </div>
